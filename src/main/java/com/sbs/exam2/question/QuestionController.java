@@ -3,6 +3,7 @@ package com.sbs.exam2.question;
 import com.sbs.exam2.answer.AnswerForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +17,9 @@ public class QuestionController {
 
     private final QuestionService questionService;
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questions = questionService.getList();
-        model.addAttribute("questions",questions);
+    public String list(Model model, @RequestParam(value="page",defaultValue = "0") int page) {
+        Page<Question> paging = this.questionService.getList(page);
+        model.addAttribute("paging",paging);
         return "question_list";
     }
     @GetMapping(value = "/detail/{id}")

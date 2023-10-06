@@ -2,6 +2,7 @@ package com.sbs.exam2;
 
 import com.sbs.exam2.question.Question;
 import com.sbs.exam2.question.QuestionRepository;
+import com.sbs.exam2.question.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,28 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class Exam2ApplicationTests {
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionService questionService;
 
 	@Test
 	void testJpa() {
-		Question q1 = new Question();
-		q1.setSubject("제목1");
-		q1.setContent("내용1");
-		q1.setCreateDate(LocalDateTime.now());
-		questionRepository.save(q1);
-
-		Question q2 = new Question();
-		q2.setSubject("제목2");
-		q2.setContent("내용2");
-		q2.setCreateDate(LocalDateTime.now());
-		questionRepository.save(q2);
-
-		List<Question> all = this.questionRepository.findAll();
-		assertEquals(2, all.size());
-
-		Question q = all.get(0);
-		assertEquals("제목1",q.getSubject());
-
+		for(int i = 1; i<= 300; i++) {
+			String subject = String.format("테스트 데이터입니다:[%03d]",i);
+			String content = "내용무";
+			this.questionService.create(subject, content);
+		}
 	}
-
 }
