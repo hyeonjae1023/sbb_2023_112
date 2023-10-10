@@ -1,11 +1,13 @@
-package com.sbs.exam2;
+package com.sbs.exam2.user;
 
 import com.sbs.exam2.question.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 
 public interface UserRepository extends JpaRepository<SiteUser, Long> {
-
+    Optional<SiteUser> findByUsername(String username);
 }

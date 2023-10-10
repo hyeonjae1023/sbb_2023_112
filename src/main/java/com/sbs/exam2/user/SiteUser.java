@@ -1,4 +1,4 @@
-package com.sbs.exam2;
+package com.sbs.exam2.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

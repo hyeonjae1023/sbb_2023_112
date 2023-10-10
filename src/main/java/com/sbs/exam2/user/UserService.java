@@ -1,4 +1,4 @@
-package com.sbs.exam2;
+package com.sbs.exam2.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +12,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser create(String username, String password, String email) {
+    public SiteUser create(String username, String email, String password) {
         SiteUser siteUser = new SiteUser();
         siteUser.setUsername(username);
         siteUser.setEmail(email);

@@ -1,4 +1,4 @@
-package com.sbs.exam2;
+package com.sbs.exam2.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +42,9 @@ public class UserController {
             return "signup_form";
         }
         return "redirect:/";
+    }
+    @GetMapping("/login")
+    public String login() {
+        return "login_form";
     }
 }
