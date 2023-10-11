@@ -1,6 +1,7 @@
 package com.sbs.exam2.question;
 
 import com.sbs.exam2.DataNotFoundException;
+import com.sbs.exam2.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,11 +36,28 @@ public class QuestionService {
         }
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SiteUser user) {
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
+        question.setAuthor(user);
         question.setCreateDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
+
+    public void modify(Question question, String content, String subject) {
+        question.setContent(content);
+        question.setSubject(subject);
+        question.setModifyDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
+
+    public void delete(Question question){
+        this.questionRepository.delete(question);
+    }
+
+    public void vote(Question question, SiteUser siteUser) {
+        question.getVoter().add(siteUser);
         this.questionRepository.save(question);
     }
 }
