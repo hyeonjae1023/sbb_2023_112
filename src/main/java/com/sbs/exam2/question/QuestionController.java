@@ -1,6 +1,8 @@
 package com.sbs.exam2.question;
 
+import com.sbs.exam2.answer.Answer;
 import com.sbs.exam2.answer.AnswerForm;
+import com.sbs.exam2.answer.AnswerService;
 import com.sbs.exam2.user.SiteUser;
 import com.sbs.exam2.user.UserService;
 import jakarta.validation.Valid;
@@ -22,17 +24,22 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final AnswerService answerService;
     private final UserService userService;
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page",defaultValue = "0") int page) {
-        Page<Question> paging = this.questionService.getList(page);
+    public String list(Model model, @RequestParam(value="page",defaultValue = "0") int page
+                        , @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging",paging);
+        model.addAttribute("kw", kw);
         return "question_list";
     }
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, @RequestParam(value="page",defaultValue = "0") int page, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id);
+        Page<Answer> paging = this.answerService.getAnswers(question, page);
         model.addAttribute("question",question);
+        model.addAttribute("paging", paging);
         return "question_detail";
     }
     @PreAuthorize("isAuthenticated()")
