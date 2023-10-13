@@ -3,6 +3,7 @@ package com.sbs.exam2.question;
 import com.sbs.exam2.answer.Answer;
 import com.sbs.exam2.answer.AnswerForm;
 import com.sbs.exam2.answer.AnswerService;
+import com.sbs.exam2.comment.CommentForm;
 import com.sbs.exam2.user.SiteUser;
 import com.sbs.exam2.user.UserService;
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class QuestionController {
         return "question_list";
     }
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, @RequestParam(value="page",defaultValue = "0") int page, AnswerForm answerForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, @RequestParam(value="page",defaultValue = "0") int page, AnswerForm answerForm, CommentForm commentForm) {
         Question question = this.questionService.getQuestion(id);
         Page<Answer> paging = this.answerService.getAnswers(question, page);
         model.addAttribute("question",question);
