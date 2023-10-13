@@ -69,6 +69,9 @@
                    class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
                    th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
                    th:text="삭제"></a>
+                <button sec:authorize="isAuthenticated()"
+                        class="btn btn-primary my-2" onclick="toggleCommentForm(this)"
+                        th:data-answer-id="${answer.id}">댓글등록</button>
             </div>
         </div>
         <div class="card my-3" th:each="comment : ${answer.comments}">
@@ -88,8 +91,8 @@
                 </div>
             </div>
         </div>
-        <button sec:authorize="isAuthenticated()" class="btn btn-primary my-2" id="showCommentFormBtn">댓글등록</button>
-        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" method="post" id="commentForm" style="display: none;">
+
+        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" class="hidden" method="post" th:id="|commentForm-${answer.id}|">
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
             <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
@@ -163,8 +166,11 @@ Array.from(page_elements).forEach(function(element) {
         document.getElementById('page').value = this.dataset.page;
     });
 });
-       document.getElementById("showCommentFormBtn").addEventListener("click", function() {
-        document.getElementById("commentForm").style.display = "block";
-    });
+
+
+    function toggleCommentForm(element){
+        const answerId = element.getAttribute("data-answer-id");
+        document.getElementById("commentForm-" + answerId ).classList.toggle("hidden")
+    }
 </script>
 </html>
