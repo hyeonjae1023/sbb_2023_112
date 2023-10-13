@@ -110,7 +110,7 @@
         </div>
         <!--    댓글 반복 끝    -->
 <!--    댓글 작성 시작    -->
-        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" class="hidden" method="post" th:id="|commentForm-${answer.id}|">
+        <form th:action="@{|/comment/create/${answer.id}|}" th:object="${commentForm}" style="display: none" method="post" th:id="|commentForm-${answer.id}|">
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
             <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
@@ -146,7 +146,7 @@
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
-        <input type="submit" value="답변등록" class="btn btn my-2">
+        <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 </div>
 <script layout:fragment="script" type='text/javascript'>
@@ -172,11 +172,15 @@ Array.from(page_elements).forEach(function(element) {
         document.getElementById('page').value = this.dataset.page;
     });
 });
+    function toggleCommentForm(button) {
+    const answerId = button.getAttribute("data-answer-id");
+    const form = document.getElementById("commentForm-" + answerId);
 
-
-    function toggleCommentForm(element){
-        const answerId = element.getAttribute("data-answer-id");
-        document.getElementById("commentForm-" + answerId ).classList.toggle("hidden")
+    if( form.style.display == "block") {
+    form.style.display = "none";
+    } else {
+        form.style.display = "block";
     }
+}
 </script>
 </html>
