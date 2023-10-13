@@ -32,13 +32,6 @@ public class CommentService {
         this.commentRepository.save(comment);
         return comment;
     }
-//    public Page<Answer> getAnswers(Question question, int page) {
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-//        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-//        return this.answerRepository.findByQuestion(question, pageable);
-//    }
-
     public Comment getComment(Integer id) {
         Optional<Comment> comment = this.commentRepository.findById(id);
         if (comment.isPresent()) {
@@ -57,4 +50,8 @@ public class CommentService {
         this.commentRepository.delete(comment);
     }
 
+    public void vote(Comment comment, SiteUser siteUser) {
+        comment.getVoter().add(siteUser);
+        this.commentRepository.save(comment);
+    }
 }
