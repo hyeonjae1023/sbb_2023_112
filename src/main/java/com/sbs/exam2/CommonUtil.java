@@ -17,11 +17,4 @@ public class CommonUtil {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         return renderer.render(document);
     }
-    public String createTempPassword() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] randomBytes = new byte[6];
-        secureRandom.nextBytes(randomBytes);
-
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
-    }
 }

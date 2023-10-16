@@ -1,11 +1,26 @@
 server:
   port: 8090
+
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hyeonjae1023111@gmail.com
+    password: q1w2e3r4~!
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/sbb_dev
     username: sbsst
     password: sbs123414
+
   jpa:
     hibernate:
       ddl-auto: update
