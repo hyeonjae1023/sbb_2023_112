@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -38,13 +39,22 @@ public class UserService {
         }
     }
 
+    public boolean getUserByEmailAndUsername(String email, String username) {
+        SiteUser user = this.userRepository.findByEmailAndUsername(email, username).orElseThrow();
+        if( user != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean initiatePasswordReset(String email) {
         SiteUser user = userRepository.findByEmail(email).orElseThrow();
 
         if(user != null) {
             String newPassword = generatedRandomPassword();
 
-            user.setPassword(newPassword);
+            user.setPassword(passwordEncoder.encode(newPassword));
 
             userRepository.save(user);
 
