@@ -31,11 +31,19 @@ public class AnswerService {
         this.answerRepository.save(answer);
         return answer;
     }
+
     public Page<Answer> getAnswers(Question question, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
         return this.answerRepository.findByQuestion(question, pageable);
+    }
+
+    public Page<Answer> getAnswersByAuthor(int page, SiteUser author) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.answerRepository.findByAuthor(author, pageable);
     }
 
     public Answer getAnswer(Integer id) {
@@ -46,6 +54,7 @@ public class AnswerService {
             throw new DataNotFoundException("answer not found");
         }
     }
+
     public void modify(Answer answer, String content) {
         answer.setContent(content);
         answer.setModifyDate(LocalDateTime.now());

@@ -1,0 +1,87 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="container my-3">
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-6">
+                <h1>사용자 프로필</h1>
+
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h5 class="card-title">사용자 정보</h5>
+                        <div class="card-text" th:text="${user.username}"></div>
+                        <div class="card-text" th:text="${user.email}"></div>
+                    </div>
+                </div>
+
+                <!-- 사용자가 작성한 질문 목록 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">작성한 질문</h5>
+                        <!-- 질문 목록을 반복해서 표시 -->
+                        <ul class="list-group">
+                            <li class="list-group-item">질문 제목 1</li>
+                            <li class="list-group-item">질문 제목 2</li>
+                            <!-- 추가 질문들 -->
+                        </ul>
+                    </div>
+                </div>
+
+<!--                <table class="table">-->
+<!--                    <thead class="table-dark">-->
+<!--                    <tr class="text-center">-->
+<!--                        <th>번호</th>-->
+<!--                        <th style="width:50%">제목</th>-->
+<!--                        <th>카테고리</th>-->
+<!--                        <th>글쓴이</th>-->
+<!--                        <th>작성일시</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr class="text-center" th:each="questions, loop : ${questions}">-->
+<!--                        <td th:text="${questions.getTotalElements - (questions.number * questions.size) - loop.index}"></td>-->
+<!--                        <td class="text-start">-->
+<!--                            <a th:href="@{|/question/detail/${questions.id}|}" th:text="${questions.subject}"></a>-->
+<!--                            <span class="text-danger small ms-2"-->
+<!--                                  th:if="${#lists.size(questions.answers) > 0}"-->
+<!--                                  th:text="${#lists.size(questions.answers)}">-->
+<!--                    </span>-->
+<!--                        </td>-->
+<!--                        <td><span th:text="${questions.category}"></span></td>-->
+<!--                        <td><span th:if="${questions.author != null}" th:text="${questions.author.username}"></span></td>-->
+<!--                        <td th:text="${#temporals.format(questions.createDate, 'yyyy-MM-dd HH:mm')}"></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+
+<!--                &lt;!&ndash; 사용자가 작성한 답변 목록 &ndash;&gt;-->
+<!--                <div class="card mt-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">작성한 답변</h5>-->
+<!--                        &lt;!&ndash; 답변 목록을 반복해서 표시 &ndash;&gt;-->
+<!--                        <ul class="list-group">-->
+<!--                            <li class="list-group-item">답변 내용 1</li>-->
+<!--                            <li class="list-group-item">답변 내용 2</li>-->
+<!--                            &lt;!&ndash; 추가 답변들 &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 사용자가 작성한 댓글 목록 &ndash;&gt;-->
+<!--                <div class="card mt-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">작성한 댓글</h5>-->
+<!--                        &lt;!&ndash; 댓글 목록을 반복해서 표시 &ndash;&gt;-->
+<!--                        <ul class="list-group">-->
+<!--                            <li class="list-group-item">댓글 내용 1</li>-->
+<!--                            <li class="list-group-item">댓글 내용 2</li>-->
+<!--                            &lt;!&ndash; 추가 댓글들 &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>

@@ -4,14 +4,17 @@ import com.sbs.exam2.DataNotFoundException;
 import com.sbs.exam2.answer.Answer;
 import com.sbs.exam2.user.SiteUser;
 import jakarta.persistence.criteria.*;
+import jakarta.persistence.metamodel.SingularAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,13 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<Question> spec = search(kw);
         return this.questionRepository.findAll(spec, pageable);
+    }
+
+    public Page<Question> getQuestionsByAuthor(int page, SiteUser author) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+       return this.questionRepository.findByAuthor(author, pageable);
     }
 
     public Question getQuestion(Integer id) {

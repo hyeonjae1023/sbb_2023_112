@@ -40,6 +40,14 @@ public class CommentService {
             throw new DataNotFoundException("comment not found");
         }
     }
+
+    public Page<Comment> getCommentsByAuthor(int page, SiteUser author) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.commentRepository.findByAuthor(author, pageable);
+    }
+
     public void modify(Comment comment, String content) {
         comment.setContent(content);
         comment.setModifyDate(LocalDateTime.now());

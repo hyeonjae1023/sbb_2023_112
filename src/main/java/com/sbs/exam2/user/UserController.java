@@ -1,8 +1,15 @@
 package com.sbs.exam2.user;
 
+import com.sbs.exam2.answer.Answer;
+import com.sbs.exam2.answer.AnswerService;
+import com.sbs.exam2.comment.Comment;
+import com.sbs.exam2.comment.CommentService;
+import com.sbs.exam2.question.Question;
+import com.sbs.exam2.question.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +19,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Controller
 public class UserController {
 
     private final UserService userService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private final CommentService commentService;
+
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm){
         return "signup_form";
@@ -90,4 +105,18 @@ public class UserController {
 
         return "redirect:/";
     }
+    @GetMapping("/myprofile")
+    public String myProfile(Model model,
+                            @RequestParam(value="page",defaultValue = "0") int page, Principal principal) {
+        SiteUser user = userService.getUser(principal.getName());
+        Page<Question> questions = this.questionService.getQuestionsByAuthor(page, user);
+//        Page<Answer> answers = this.answerService.getAnswersByAuthor(page, user);
+//        Page<Comment> comments = this.commentService.getCommentsByAuthor(page, user);
+        model.addAttribute("user", user);
+        model.addAttribute("questions", questions);
+//        model.addAttribute("answers", answers);
+//        model.addAttribute("comments", comments);
+        return "myprofile";
+    }
+
 }
