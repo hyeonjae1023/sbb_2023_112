@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserPasswordForm {
-    @Size( max = 25)
+    @Size(max = 25)
     @NotEmpty(message = "사용자ID는 필수항목입니다.")
     private String username;
 
@@ -21,8 +21,4 @@ public class UserPasswordForm {
 
     @NotEmpty(message = "새 비밀번호는 필수항목입니다.")
     private String newPassword2;
-
-    @NotEmpty(message =  "이메일은 필수항목입니다.")
-    @Email
-    private String email;
 }
