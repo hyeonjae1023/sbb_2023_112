@@ -6,6 +6,9 @@ import com.sbs.exam2.answer.AnswerService;
 import com.sbs.exam2.comment.CommentForm;
 import com.sbs.exam2.user.SiteUser;
 import com.sbs.exam2.user.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,8 +39,40 @@ public class QuestionController {
         return "question_list";
     }
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, @RequestParam(value="page",defaultValue = "0") int page, AnswerForm answerForm, CommentForm commentForm) {
+    public String detail(Model model, @PathVariable("id") Integer id,
+                         @RequestParam(value="page",defaultValue = "0") int page,
+                         AnswerForm answerForm, CommentForm commentForm,
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
         Question question = this.questionService.getQuestion(id);
+
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null) {
+            for(Cookie cookie : cookies ) {
+                if(cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if(oldCookie != null) {
+            if(!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                this.questionService.updateHit(id);
+                oldCookie.setValue(oldCookie.getValue() + "[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            this.questionService.updateHit(id);
+            Cookie newCookie = new Cookie("postView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+        }
+
         Page<Answer> paging = this.answerService.getAnswers(question, page);
         model.addAttribute("question",question);
         model.addAttribute("paging", paging);

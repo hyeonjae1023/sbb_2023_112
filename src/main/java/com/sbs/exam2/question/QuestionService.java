@@ -5,6 +5,7 @@ import com.sbs.exam2.answer.Answer;
 import com.sbs.exam2.user.SiteUser;
 import jakarta.persistence.criteria.*;
 import jakarta.persistence.metamodel.SingularAttribute;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -93,5 +94,9 @@ public class QuestionService {
     public void vote(Question question, SiteUser siteUser) {
         question.getVoter().add(siteUser);
         this.questionRepository.save(question);
+    }
+    @Transactional
+    public int updateHit(Integer id) {
+        return this.questionRepository.updateHit(id);
     }
 }

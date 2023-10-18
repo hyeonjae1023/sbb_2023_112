@@ -38,4 +38,7 @@ public class Question {
     Set<SiteUser> voter;
 
     private String category;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int hit;
 }
