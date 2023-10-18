@@ -107,16 +107,19 @@ public class UserController {
     }
     @GetMapping("/myprofile")
     public String myProfile(Model model,
-                            @RequestParam(value="page",defaultValue = "0") int page, Principal principal) {
+                            @RequestParam(value="page",defaultValue = "0") int page,
+                            Principal principal) {
+
         SiteUser user = userService.getUser(principal.getName());
+
         Page<Question> questions = this.questionService.getQuestionsByAuthor(page, user);
-//        Page<Answer> answers = this.answerService.getAnswersByAuthor(page, user);
-//        Page<Comment> comments = this.commentService.getCommentsByAuthor(page, user);
+        Page<Answer> answers = this.answerService.getAnswersByAuthor(page, user);
+        Page<Comment> comments = this.commentService.getCommentsByAuthor(page, user);
+
         model.addAttribute("user", user);
         model.addAttribute("questions", questions);
-//        model.addAttribute("answers", answers);
-//        model.addAttribute("comments", comments);
+        model.addAttribute("answers", answers);
+        model.addAttribute("comments", comments);
         return "myprofile";
     }
-
 }
