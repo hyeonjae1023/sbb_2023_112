@@ -23,7 +23,7 @@
                             <thead class="table-dark">
                             <tr class="text-center">
                                 <th>번호</th>
-                                <th style="width:50%">제목</th>
+                                <th >제목</th>
                                 <th>카테고리</th>
                                 <th>글쓴이</th>
                                 <th>작성일시</th>
@@ -57,8 +57,7 @@
                             <thead class="table-dark">
                             <tr class="text-center">
                                 <th>번호</th>
-                                <th style="width:50%">제목</th>
-                                <th>카테고리</th>
+                                <th >제목</th>
                                 <th>글쓴이</th>
                                 <th>작성일시</th>
                             </tr>
@@ -90,8 +89,7 @@
                             <thead class="table-dark">
                             <tr class="text-center">
                                 <th>번호</th>
-                                <th style="width:50%">제목</th>
-                                <th>카테고리</th>
+                                <th >내용</th>
                                 <th>글쓴이</th>
                                 <th>작성일시</th>
                             </tr>
@@ -100,9 +98,8 @@
                             <tr class="text-center" th:each="comment, loop : ${comments}">
                                 <td th:text="${comments.getTotalElements - (comments.number * comments.size) - loop.index}"></td>
                                 <td class="text-start">
-                                    <a th:text="${comment.subject}"></a>
+                                    <a th:text="${comment.content}"></a>
                                 </td>
-                                <td><span th:text="${comment.category}"></span></td>
                                 <td><span th:if="${comment.author != null}" th:text="${comment.author.username}"></span></td>
                                 <td th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                             </tr>

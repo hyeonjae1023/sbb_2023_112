@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,6 +85,7 @@ public class UserController {
 
         return "redirect:/";
     }
+
     @GetMapping("/resetPassword")
     public String resetPassword(UserResetPasswordForm UserResetPasswordForm) {
         return "reset_password";
@@ -105,6 +107,7 @@ public class UserController {
 
         return "redirect:/";
     }
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/myprofile")
     public String myProfile(Model model,
                             @RequestParam(value="page",defaultValue = "0") int page,
