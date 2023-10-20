@@ -21,27 +21,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(this.kakaoClientRegistration());
-    }
-
-    private ClientRegistration kakaoClientRegistration() {
-        return ClientRegistration
-                .withRegistrationId("kakao")
-                .clientId("eaf798efc47254e12eba3a9a52b72302")
-                .clientName("kakao")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
-                .scope("profile")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationUri("https://kauth.kakao.com/oauth/authorize")
-                .tokenUri("https://kauth.kakao.com/oauth/token")
-                .userInfoUri("https://kapi.kakao.com/v2/user/me")
-                .userNameAttributeName("id")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .build();
-    }
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
