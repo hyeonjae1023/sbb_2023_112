@@ -19,7 +19,24 @@
         <a href="/user/resetPassword" class="btn btn-secondary">비밀번호 찾기</a>
         <!-- 버튼을 추가하여 "/changePassword" 페이지로 이동 -->
         <a href="/user/changePassword" class="btn btn-secondary">비밀번호 변경</a>
+        <!-- 카카오 로그인 버튼 추가 -->
+        <a href="/user/login" onclick="loginWithKakao();" class="btn btn-success">카카오로 로그인</a>
+
     </form>
 
 </div>
+<script>
+    // 카카오 로그인 스크립트
+    function loginWithKakao() {
+        Kakao.Auth.authorize({
+            redirectUri: '카카오 로그인 콜백 URL'
+        });
+    }
+</script>
+
+<!-- 카카오 로그인 SDK 스크립트 추가 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+    Kakao.init('여기에_클라이언트_ID_입력'); // 카카오 개발자 사이트에서 발급받은 클라이언트 ID를 입력
+</script>
 </html>
