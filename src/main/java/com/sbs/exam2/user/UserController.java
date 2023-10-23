@@ -6,6 +6,7 @@ import com.sbs.exam2.answer.Answer;
 import com.sbs.exam2.answer.AnswerService;
 import com.sbs.exam2.comment.Comment;
 import com.sbs.exam2.comment.CommentService;
+import com.sbs.exam2.model.KakaoProfile;
 import com.sbs.exam2.model.OAuthToken;
 import com.sbs.exam2.question.Question;
 import com.sbs.exam2.question.QuestionService;
@@ -18,6 +19,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.util.UUID;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -39,6 +44,7 @@ public class UserController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final CommentService commentService;
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm){
@@ -66,6 +72,7 @@ public class UserController {
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup_form";
         }
+
         return "redirect:/";
     }
     @GetMapping("/login")
@@ -74,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/auth/kakao/callback")
-    public @ResponseBody String kakaoCallback(String code) throws JsonProcessingException { //Data를 리턴해주는 컨트롤러
+    public String kakaoCallback(String code) throws JsonProcessingException { //Data를 리턴해주는 컨트롤러
         //POST방식으로 key=value 데이터를 요청(카카오 쪽으로)
         RestTemplate rt = new RestTemplate();
 
@@ -127,7 +134,23 @@ public class UserController {
                 String.class
         );
 
-        return response2.getBody();
+        ObjectMapper objectMapper2 = new ObjectMapper();
+
+        KakaoProfile kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
+
+        System.out.println("카카오 아이디(번호): " + kakaoProfile.getId());
+        System.out.println("카카오 이메일: " + kakaoProfile.getId()+"@gmail.com");
+        System.out.println("카카오 username: " + kakaoProfile.getId()+"__");
+        UUID garbagePw = UUID.randomUUID();
+        System.out.println("카카오 비번: "+garbagePw);
+
+        SiteUser user = new SiteUser();
+
+        userService.create(kakaoProfile.getId()+"__", kakaoProfile.getId()+"@gmail.com", garbagePw.toString());
+
+        //로그인 처리
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+        return "redirect:/";
     }
     @GetMapping("/changePassword")
     public String changePasswordForm(UserPasswordForm userPasswordForm) {
