@@ -1,8 +1,7 @@
 package com.sbs.exam2.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -12,9 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SiteUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(unique = true)
@@ -25,7 +29,7 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
-    private String nickName;
+    private String nickname;
 
     private String profileImgUrl;
 
@@ -41,8 +45,6 @@ public class SiteUser {
         }
 
         return grantedAuthorities;
-
-
     }
 
     private boolean isAdmin() {

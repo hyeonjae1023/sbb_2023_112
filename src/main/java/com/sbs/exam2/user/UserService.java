@@ -6,9 +6,9 @@ import com.sbs.exam2.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -18,17 +18,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final CommonUtil commonUtil;
-
-
-    public SiteUser create(String username, String email, String password) {
-        SiteUser siteUser = new SiteUser();
-        siteUser.setUsername(username);
-        siteUser.setEmail(email);
-        siteUser.setPassword(passwordEncoder.encode(password));
-        this.userRepository.save(siteUser);
-        return siteUser;
-    }
 
     public SiteUser getUser(String username) {
         Optional<SiteUser> siteUser = this.userRepository.findByUsername(username);
@@ -95,5 +84,32 @@ public class UserService {
             return true;
         }
         return false;
+    }
+    @Transactional
+    public SiteUser whenSocialLogin(String providerTypeCode, String username, String email, String nickname, String profileImgUrl) {
+        Optional<SiteUser> opUser = findByUsername(username);
+
+        if(opUser.isPresent()) return opUser.get();
+
+        return join(username,"", email, nickname, profileImgUrl);
+    }
+
+    public SiteUser join(String username, String password, String email, String nickname, String profileImgUrl) {
+        SiteUser user = SiteUser
+                .builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .nickname(nickname)
+                .profileImgUrl(profileImgUrl)
+                .build();
+
+        System.out.println("HI");
+
+        return userRepository.save(user);
+    }
+
+    public Optional<SiteUser> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
